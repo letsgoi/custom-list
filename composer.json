@@ -1,0 +1,42 @@
+{
+  "name": "letsgoi/custom-collection",
+  "description": "PHP Custom Collection package",
+  "keywords": [
+    "goi",
+    "letsgoi",
+    "custom",
+    "collection",
+    "collections"
+  ],
+  "homepage": "https://github.com/letsgoi/custom-collection",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "GOI",
+      "email": "tech@letsgoi.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.0",
+    "letsgoi/php-code-style": "^0.1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Letsgoi\\CustomCollection\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Letsgoi\\CustomCollection\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "syntax": "phpcs"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
