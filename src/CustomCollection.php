@@ -4,9 +4,9 @@ namespace Letsgoi\CustomCollection;
 
 use ArrayAccess;
 use ArrayIterator;
-use Exception;
 use IteratorAggregate;
-use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeError;
+use Letsgoi\CustomCollection\Exceptions\CustomCollectionKeyNotExistException;
+use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeErrorException;
 use Traversable;
 
 abstract class CustomCollection implements IteratorAggregate, ArrayAccess
@@ -39,7 +39,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      * @param mixed $key
      * @param mixed $item
      * @return void
-     * @throws Exception
+     * @throws CustomCollectionTypeErrorException
      */
     public function offsetSet($key, $item): void
     {
@@ -86,12 +86,22 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * Convert collection to array
+     * Get item by key or all items without it
      *
-     * @return array
+     * @param null $key
+     * @return mixed
+     * @throws CustomCollectionKeyNotExistException
      */
-    public function toArray(): array
+    public function get($key = null)
     {
+        if ($key !== null) {
+            if (!array_key_exists($key, $this->items)) {
+                throw new CustomCollectionKeyNotExistException();
+            }
+
+            return $this->items[$key];
+        }
+
         return $this->items;
     }
 
@@ -100,7 +110,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      *
      * @param mixed $item
      * @return void
-     * @throws Exception
+     * @throws CustomCollectionTypeErrorException
      */
     public function add($item): void
     {
@@ -113,7 +123,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      * Check if all items are of right type
      *
      * @return void
-     * @throws Exception
+     * @throws CustomCollectionTypeErrorException
      */
     private function checkItems(): void
     {
@@ -127,14 +137,14 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      *
      * @param mixed $item
      * @return void
-     * @throws Exception
+     * @throws CustomCollectionTypeErrorException
      */
     private function checkItemType($item): void
     {
         $type = $this->getCollectionType();
 
-        if ((is_object($item) && !$item instanceof $type) || gettype($item) !== $type) {
-            throw new CustomCollectionTypeError("All items must be of type '{$this->getCollectionType()}'.");
+        if ((is_object($item) && !$item instanceof $type) || (!is_object($item) && gettype($item) !== $type)) {
+            throw new CustomCollectionTypeErrorException("All items must be of type '{$this->getCollectionType()}'.");
         }
     }
 }

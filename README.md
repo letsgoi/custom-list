@@ -39,12 +39,14 @@ You can use the collection as an array (set, get, ...)
 
 ## Available methods
 
-#### toArray()
+#### get($key = null)
 
-Return collection as an array: 
+Return item by key or all collection without it: 
 
 ```php
-$collection->toArray(); // ['item', 'item', ...]
+$collection->get(0); // 'item'
+
+$collection->get(); // ['item', 'item', ...]
 ```
 
 #### add($item)

@@ -4,7 +4,8 @@ namespace Letsgoi\CustomCollection\Tests;
 
 use Exception;
 use Letsgoi\CustomCollection\CustomCollection;
-use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeError;
+use Letsgoi\CustomCollection\Exceptions\CustomCollectionKeyNotExistException;
+use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeErrorException;
 use stdClass;
 
 class CustomCollectionTest extends TestCase
@@ -27,7 +28,7 @@ class CustomCollectionTest extends TestCase
     }
 
     /** @test */
-    public function it_should_convert_to_array()
+    public function it_should_get_all_items_of_collection()
     {
         $items = ['item', 'anotherItem'];
 
@@ -38,13 +39,44 @@ class CustomCollectionTest extends TestCase
             }
         };
 
-        $this->assertSame($items, $stringCollection->toArray());
+        $this->assertSame($items, $stringCollection->get());
+    }
+
+    /** @test */
+    public function it_should_get_items_from_collection_by_key()
+    {
+        $items = ['item', 'anotherItem'];
+
+        $stringCollection = new class ($items) extends CustomCollection {
+            protected function getCollectionType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $this->assertSame('item', $stringCollection->get(0));
+        $this->assertSame('anotherItem', $stringCollection->get(1));
+    }
+
+    /** @test */
+    public function it_should_throw_exception_on_get_unknown_key_on_collection()
+    {
+        $this->expectException(CustomCollectionKeyNotExistException::class);
+
+        $stringCollection = new class () extends CustomCollection {
+            protected function getCollectionType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $stringCollection->get(0);
     }
 
     /** @test */
     public function it_should_throw_an_exception_if_not_all_items_are_of_collection_type()
     {
-        $this->expectException(CustomCollectionTypeError::class);
+        $this->expectException(CustomCollectionTypeErrorException::class);
         $this->expectExceptionMessage('All items must be of type \'stdClass\'');
 
         $items = [new stdClass(), new stdClass(), 'notStdClass'];
