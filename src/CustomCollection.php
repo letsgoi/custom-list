@@ -6,6 +6,7 @@ use ArrayAccess;
 use ArrayIterator;
 use Exception;
 use IteratorAggregate;
+use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeError;
 use Traversable;
 
 abstract class CustomCollection implements IteratorAggregate, ArrayAccess
@@ -17,11 +18,16 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
 
     public function __construct(array $items = [])
     {
-        $this->checkItems($items);
-
         $this->items = $items;
+
+        $this->checkItems();
     }
 
+    /**
+     * Iterator method
+     *
+     * @return Traversable
+     */
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
@@ -32,11 +38,12 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      *
      * @param mixed $key
      * @param mixed $item
+     * @return void
      * @throws Exception
      */
     public function offsetSet($key, $item): void
     {
-        $this->checkItems([$item]);
+        $this->checkItemType($item);
 
         if ($key === null) {
             $this->items[] = $item;
@@ -71,6 +78,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      * Remove item from collection by key
      *
      * @param mixed $key
+     * @return void
      */
     public function offsetUnset($key): void
     {
@@ -88,17 +96,29 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * Check if all items are of right type
+     * Append item to collection
      *
-     * @param array $items
+     * @param mixed $item
+     * @return void
      * @throws Exception
      */
-    private function checkItems(array $items): void
+    public function add($item): void
     {
-        foreach ($items as $item) {
-            if (!$this->checkItemType($item)) {
-                throw new Exception("All items must be of type '{$this->getCollectionType()}'.");
-            }
+        $this->checkItemType($item);
+
+        $this->items[] = $item;
+    }
+
+    /**
+     * Check if all items are of right type
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function checkItems(): void
+    {
+        foreach ($this->items as $item) {
+            $this->checkItemType($item);
         }
     }
 
@@ -106,16 +126,15 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
      * Checks if the item passed is the right type
      *
      * @param mixed $item
-     * @return bool
+     * @return void
+     * @throws Exception
      */
-    private function checkItemType($item): bool
+    private function checkItemType($item): void
     {
         $type = $this->getCollectionType();
 
-        if (is_object($item)) {
-            return $item instanceof $type;
+        if ((is_object($item) && !$item instanceof $type) || gettype($item) !== $type) {
+            throw new CustomCollectionTypeError("All items must be of type '{$this->getCollectionType()}'.");
         }
-
-        return gettype($item) === $type;
     }
 }

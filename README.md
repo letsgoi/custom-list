@@ -47,6 +47,14 @@ Return collection as an array:
 $collection->toArray(); // ['item', 'item', ...]
 ```
 
+#### add($item)
+
+Append item to collection: 
+
+```php
+$collection->add($item);
+```
+
 ## Testing
 
 Run tests:

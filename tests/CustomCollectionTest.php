@@ -4,6 +4,7 @@ namespace Letsgoi\CustomCollection\Tests;
 
 use Exception;
 use Letsgoi\CustomCollection\CustomCollection;
+use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeError;
 use stdClass;
 
 class CustomCollectionTest extends TestCase
@@ -43,7 +44,7 @@ class CustomCollectionTest extends TestCase
     /** @test */
     public function it_should_throw_an_exception_if_not_all_items_are_of_collection_type()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(CustomCollectionTypeError::class);
         $this->expectExceptionMessage('All items must be of type \'stdClass\'');
 
         $items = [new stdClass(), new stdClass(), 'notStdClass'];
@@ -85,5 +86,22 @@ class CustomCollectionTest extends TestCase
         $stringCollection[] = 'item';
 
         $this->assertSame('item', $stringCollection[0]);
+    }
+
+    /** @test */
+    public function it_should_append_items()
+    {
+        $items = ['item'];
+
+        $stringCollection = new class ($items) extends CustomCollection {
+            protected function getCollectionType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $stringCollection->add('anotherItem');
+
+        $this->assertSame('anotherItem', $stringCollection[1]);
     }
 }
