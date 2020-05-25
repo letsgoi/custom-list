@@ -136,4 +136,19 @@ class CustomCollectionTest extends TestCase
 
         $this->assertSame('anotherItem', $stringCollection[1]);
     }
+
+    /** @test */
+    public function it_should_count_items()
+    {
+        $items = ['item', 'anotherItem'];
+
+        $stringCollection = new class ($items) extends CustomCollection {
+            protected function getCollectionType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $this->assertSame(2, count($stringCollection));
+    }
 }

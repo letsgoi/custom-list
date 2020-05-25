@@ -4,12 +4,13 @@ namespace Letsgoi\CustomCollection;
 
 use ArrayAccess;
 use ArrayIterator;
+use Countable;
 use IteratorAggregate;
 use Letsgoi\CustomCollection\Exceptions\CustomCollectionKeyNotExistException;
 use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeErrorException;
 use Traversable;
 
-abstract class CustomCollection implements IteratorAggregate, ArrayAccess
+abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Countable
 {
     /** @var array */
     protected $items;
@@ -83,6 +84,16 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess
     public function offsetUnset($key): void
     {
         unset($this->items[$key]);
+    }
+
+    /**
+     * Countable method
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->items);
     }
 
     /**
