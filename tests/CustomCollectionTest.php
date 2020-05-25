@@ -55,4 +55,35 @@ class CustomCollectionTest extends TestCase
             }
         };
     }
+
+    /** @test */
+    public function it_should_access_to_key_of_collection()
+    {
+        $items = ['item', 'anotherItem'];
+
+        $stringCollection = new class ($items) extends CustomCollection {
+            protected function getCollectionType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $this->assertSame('item', $stringCollection[0]);
+        $this->assertSame('anotherItem', $stringCollection[1]);
+    }
+
+    /** @test */
+    public function it_should_add_items_as_array()
+    {
+        $stringCollection = new class () extends CustomCollection {
+            protected function getCollectionType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $stringCollection[] = 'item';
+
+        $this->assertSame('item', $stringCollection[0]);
+    }
 }
