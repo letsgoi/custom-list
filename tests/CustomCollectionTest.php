@@ -11,7 +11,7 @@ use stdClass;
 class CustomCollectionTest extends TestCase
 {
     /** @test */
-    public function it_should_iterate_all_his_items()
+    public function it_should_iterate_all_its_items()
     {
         $items = ['item', 'anotherItem'];
 
@@ -59,7 +59,7 @@ class CustomCollectionTest extends TestCase
     }
 
     /** @test */
-    public function it_should_throw_exception_on_get_unknown_key_on_collection()
+    public function it_should_throw_exception_when_get_unknown_key_on_collection()
     {
         $this->expectException(CustomCollectionKeyNotExistException::class);
 
