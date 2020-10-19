@@ -1,6 +1,6 @@
 <?php
 
-namespace Letsgoi\CustomCollection\Tests;
+namespace Letsgoi\CustomList\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnit;
 

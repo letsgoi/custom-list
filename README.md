@@ -1,4 +1,4 @@
-# PHP Custom Collection
+# PHP Custom List
 
 Class to wrap array of items to force same type. This is for avoid the php array type hinting problem.
 
@@ -8,14 +8,14 @@ Class to wrap array of items to force same type. This is for avoid the php array
 
 ## Usage
 
-Extends the `CustomCollection` abstract class and set the type of the items with `getCollectionType` method:
+Extends the `CustomList` abstract class and set the type of the items with `getListType` method:
 
 ```php
-use Letsgoi\CustomCollection\CustomCollection;
+use Letsgoi\CustomList\CustomList;
 
-class ItemCollection extends CustomCollection
+class ItemList extends CustomList
 {
-    protected function getCollectionType(): string
+    protected function getListType(): string
     {
         return Item::class;  
     }
@@ -24,37 +24,37 @@ class ItemCollection extends CustomCollection
 //
 
 $items = [new Item(), new Item(), ...];
-$collection = new ItemCollection($items);
+$list = new ItemList($items);
 ```
 
 To iterate items:
 
 ```php
-foreach ($collection as $item) {
+foreach ($list as $item) {
     //
 }
 ```
 
-You can use the collection as an array (set, get, ...)
+You can use the list as an array (set, get, ...)
 
 ## Available methods
 
 #### get($key = null)
 
-Return item by key or all collection without it: 
+Return item by key or all list without it: 
 
 ```php
-$collection->get(0); // 'item'
+$list->get(0); // 'item'
 
-$collection->get(); // ['item', 'item', ...]
+$list->get(); // ['item', 'item', ...]
 ```
 
 #### add($item)
 
-Append item to collection: 
+Append item to list: 
 
 ```php
-$collection->add($item);
+$list->add($item);
 ```
 
 ## Testing

@@ -1,14 +1,13 @@
 {
-  "name": "letsgoi/custom-collection",
-  "description": "PHP Custom Collection package",
+  "name": "letsgoi/custom-list",
+  "description": "PHP Custom List package",
   "keywords": [
     "goi",
     "letsgoi",
     "custom",
-    "collection",
-    "collections"
+    "list"
   ],
-  "homepage": "https://github.com/letsgoi/custom-collection",
+  "homepage": "https://github.com/letsgoi/custom-list",
   "license": "MIT",
   "authors": [
     {
@@ -25,12 +24,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Letsgoi\\CustomCollection\\": "src"
+      "Letsgoi\\CustomList\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Letsgoi\\CustomCollection\\Tests\\": "tests"
+      "Letsgoi\\CustomList\\Tests\\": "tests"
     }
   },
   "scripts": {
