@@ -1,21 +1,21 @@
 <?php
 
-namespace Letsgoi\CustomCollection;
+namespace Letsgoi\CustomList;
 
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use Letsgoi\CustomCollection\Exceptions\CustomCollectionKeyNotExistException;
-use Letsgoi\CustomCollection\Exceptions\CustomCollectionTypeErrorException;
+use Letsgoi\CustomList\Exceptions\CustomListKeyNotExistException;
+use Letsgoi\CustomList\Exceptions\CustomListTypeErrorException;
 use Traversable;
 
-abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Countable
+abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
 {
     /** @var array */
     protected $items;
 
-    abstract protected function getCollectionType(): string;
+    abstract protected function getListType(): string;
 
     public function __construct(array $items = [])
     {
@@ -35,12 +35,12 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * Add item to collection as array
+     * Add item to list as array
      *
      * @param mixed $key
      * @param mixed $item
      * @return void
-     * @throws CustomCollectionTypeErrorException
+     * @throws CustomListTypeErrorException
      */
     public function offsetSet($key, $item): void
     {
@@ -54,7 +54,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * Get item from collection with key
+     * Get item from list with key
      *
      * @param mixed $key
      * @return mixed
@@ -65,7 +65,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * Checks if the collection as an item by key
+     * Checks if the list as an item by key
      *
      * @param mixed $key
      * @return bool
@@ -76,7 +76,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * Remove item from collection by key
+     * Remove item from list by key
      *
      * @param mixed $key
      * @return void
@@ -101,13 +101,13 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
      *
      * @param null $key
      * @return mixed
-     * @throws CustomCollectionKeyNotExistException
+     * @throws CustomListKeyNotExistException
      */
     public function get($key = null)
     {
         if ($key !== null) {
             if (!array_key_exists($key, $this->items)) {
-                throw new CustomCollectionKeyNotExistException();
+                throw new CustomListKeyNotExistException();
             }
 
             return $this->items[$key];
@@ -117,11 +117,11 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
     }
 
     /**
-     * Append item to collection
+     * Append item to list
      *
      * @param mixed $item
      * @return void
-     * @throws CustomCollectionTypeErrorException
+     * @throws CustomListTypeErrorException
      */
     public function add($item): void
     {
@@ -134,7 +134,7 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
      * Check if all items are of right type
      *
      * @return void
-     * @throws CustomCollectionTypeErrorException
+     * @throws CustomListTypeErrorException
      */
     private function checkItems(): void
     {
@@ -148,14 +148,14 @@ abstract class CustomCollection implements IteratorAggregate, ArrayAccess, Count
      *
      * @param mixed $item
      * @return void
-     * @throws CustomCollectionTypeErrorException
+     * @throws CustomListTypeErrorException
      */
     private function checkItemType($item): void
     {
-        $type = $this->getCollectionType();
+        $type = $this->getListType();
 
         if ((is_object($item) && !$item instanceof $type) || (!is_object($item) && gettype($item) !== $type)) {
-            throw new CustomCollectionTypeErrorException("All items must be of type '{$this->getCollectionType()}'.");
+            throw new CustomListTypeErrorException("All items must be of type '{$this->getListType()}'.");
         }
     }
 }
