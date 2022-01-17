@@ -12,8 +12,7 @@ use Traversable;
 
 abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
 {
-    /** @var array */
-    protected $items;
+    protected array $items;
 
     abstract protected function getListType(): string;
 
@@ -37,53 +36,53 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Add item to list as array
      *
-     * @param mixed $key
-     * @param mixed $item
+     * @param mixed $offset
+     * @param mixed $value
      * @return void
      * @throws CustomListTypeErrorException
      */
-    public function offsetSet($key, $item): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->checkItemType($item);
+        $this->checkItemType($value);
 
-        if ($key === null) {
-            $this->items[] = $item;
+        if ($offset === null) {
+            $this->items[] = $value;
         } else {
-            $this->items[$key] = $item;
+            $this->items[$offset] = $value;
         }
     }
 
     /**
      * Get item from list with key
      *
-     * @param mixed $key
+     * @param mixed $offset
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $offset): mixed
     {
-        return $this->items[$key];
+        return $this->items[$offset];
     }
 
     /**
      * Checks if the list as an item by key
      *
-     * @param mixed $key
+     * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($key): bool
+    public function offsetExists(mixed $offset): bool
     {
-        return array_key_exists($key, $this->items);
+        return array_key_exists($offset, $this->items);
     }
 
     /**
      * Remove item from list by key
      *
-     * @param mixed $key
+     * @param mixed $offset
      * @return void
      */
-    public function offsetUnset($key): void
+    public function offsetUnset(mixed $offset): void
     {
-        unset($this->items[$key]);
+        unset($this->items[$offset]);
     }
 
     /**
@@ -99,11 +98,11 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Get item by key or all items without it
      *
-     * @param null $key
+     * @param string|null $key
      * @return mixed
      * @throws CustomListKeyNotExistException
      */
-    public function get($key = null)
+    public function get(?string $key = null): mixed
     {
         if ($key !== null) {
             if (!array_key_exists($key, $this->items)) {
@@ -123,7 +122,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
      * @return void
      * @throws CustomListTypeErrorException
      */
-    public function add($item): void
+    public function add(mixed $item): void
     {
         $this->checkItemType($item);
 
@@ -150,7 +149,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
      * @return void
      * @throws CustomListTypeErrorException
      */
-    private function checkItemType($item): void
+    private function checkItemType(mixed $item): void
     {
         $type = $this->getListType();
 
