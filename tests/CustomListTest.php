@@ -150,4 +150,71 @@ class CustomListTest extends TestCase
 
         $this->assertSame(2, count($stringList));
     }
+
+    /** @test */
+    public function it_should_merge_custom_lists()
+    {
+        $items = ['item', 'anotherItem'];
+
+        $stringList = new class ($items) extends CustomList {
+            protected function getListType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $otherItems = ['otherItem', 'anotherOtherItem'];
+
+        $otherStringList = new class ($otherItems) extends CustomList {
+            protected function getListType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $otherItems2 = ['otherItem2', 'anotherOtherItem2'];
+
+        $otherStringList2 = new class ($otherItems2) extends CustomList {
+            protected function getListType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $stringList->merge($otherStringList, $otherStringList2);
+
+        $this->assertSame('item', $stringList[0]);
+        $this->assertSame('anotherItem', $stringList[1]);
+        $this->assertSame('otherItem', $stringList[2]);
+        $this->assertSame('anotherOtherItem', $stringList[3]);
+        $this->assertSame('otherItem2', $stringList[4]);
+        $this->assertSame('anotherOtherItem2', $stringList[5]);
+    }
+
+    /** @test */
+    public function it_should_return_error_while_merging_custom_lists_if_types_are_not_the_same()
+    {
+        $this->expectException(CustomListTypeErrorException::class);
+        $this->expectExceptionMessage('All items must be of type \'string\'');
+
+        $items = ['item', 'anotherItem'];
+
+        $stringList = new class ($items) extends CustomList {
+            protected function getListType(): string
+            {
+                return 'string';
+            }
+        };
+
+        $otherItems = [1, 2];
+
+        $intList = new class ($otherItems) extends CustomList {
+            protected function getListType(): string
+            {
+                return 'integer';
+            }
+        };
+
+        $stringList->merge($intList);
+    }
 }
