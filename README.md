@@ -57,6 +57,15 @@ Append item to list:
 $list->add($item);
 ```
 
+#### merge(... $customLists)
+
+Merges the elements of one or more custom lists together
+
+```php
+$list->merge($list1, $list2 ...);
+```
+
+
 ## Testing
 
 Run tests:
