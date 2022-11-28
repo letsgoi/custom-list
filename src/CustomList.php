@@ -64,7 +64,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
-     * Checks if the list as an item by key
+     * Checks if the list has an item by key
      *
      * @param mixed $offset
      * @return bool
@@ -83,6 +83,22 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     public function offsetUnset(mixed $offset): void
     {
         unset($this->items[$offset]);
+    }
+
+    /**
+     * Merges the elements of one or more custom lists together
+     *
+     * @param mixed ...$lists
+     * @return void
+     * @throws CustomListTypeErrorException
+     */
+    public function merge(...$lists): void
+    {
+        foreach ($lists as $list) {
+            $this->items = array_merge($this->items, $list->get());
+        }
+
+        $this->checkItems();
     }
 
     /**
