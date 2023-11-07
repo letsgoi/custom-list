@@ -19,8 +19,8 @@
     "php": "^8.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5",
-    "letsgoi/php-code-style": "^1.2"
+    "phpunit/phpunit": "^10.0",
+    "letsgoi/php-code-style": "^1.4"
   },
   "autoload": {
     "psr-4": {

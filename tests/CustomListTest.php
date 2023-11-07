@@ -2,6 +2,7 @@
 
 namespace Letsgoi\CustomList\Tests;
 
+use ArrayIterator;
 use Letsgoi\CustomList\CustomList;
 use Letsgoi\CustomList\Exceptions\CustomListKeyNotExistException;
 use Letsgoi\CustomList\Exceptions\CustomListTypeErrorException;
@@ -22,6 +23,23 @@ class CustomListTest extends TestCase
         };
 
         foreach ($stringList as $key => $string) {
+            $this->assertSame($items[$key], $string);
+        }
+    }
+
+    /** @test */
+    public function it_should_construct_with_traversable_object()
+    {
+        $items = new ArrayIterator(['item', 'anotherItem']);
+
+        $list = new class ($items) extends CustomList {
+            protected function getListType(): string
+            {
+                return 'string';
+            }
+        };
+
+        foreach ($list as $key => $string) {
             $this->assertSame($items[$key], $string);
         }
     }
