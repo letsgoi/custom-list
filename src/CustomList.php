@@ -16,9 +16,9 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
 
     abstract protected function getListType(): string;
 
-    public function __construct(array $items = [])
+    public function __construct(iterable $items = [])
     {
-        $this->items = $items;
+        $this->items = (array)$items;
 
         $this->checkItems();
     }
