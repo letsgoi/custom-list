@@ -4,7 +4,7 @@ Class to wrap array of items to force same type. This is for avoid the php array
 
 ## Requirements
 
-- PHP >= 7.2
+- PHP >= 8.2
 
 ## Usage
 
