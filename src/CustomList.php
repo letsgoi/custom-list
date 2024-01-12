@@ -27,7 +27,11 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
      */
     public function __construct(iterable $items = [])
     {
-        $this->items = (array)$items;
+        if ($items instanceof Traversable) {
+            $this->items = iterator_to_array($items);
+        } else {
+            $this->items = (array)$items;
+        }
 
         $this->checkItems();
     }
