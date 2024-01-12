@@ -10,12 +10,21 @@ use Letsgoi\CustomList\Exceptions\CustomListKeyNotExistException;
 use Letsgoi\CustomList\Exceptions\CustomListTypeErrorException;
 use Traversable;
 
+/**
+ * @template-covariant TValue
+ */
 abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
 {
+    /** @var array<TValue> */
     protected array $items;
 
+    /** @return class-string<TValue> */
     abstract protected function getListType(): string;
 
+    /**
+     * @param iterable<TValue> $items
+     * @throws CustomListTypeErrorException
+     */
     public function __construct(iterable $items = [])
     {
         $this->items = (array)$items;
@@ -26,7 +35,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Iterator method
      *
-     * @return Traversable
+     * @return Traversable<int, TValue>
      */
     public function getIterator(): Traversable
     {
@@ -36,8 +45,8 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Add item to list as array
      *
-     * @param mixed $offset
-     * @param mixed $value
+     * @param int $offset
+     * @param TValue $value
      * @return void
      * @throws CustomListTypeErrorException
      */
@@ -55,8 +64,8 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Get item from list with key
      *
-     * @param mixed $offset
-     * @return mixed
+     * @param int $offset
+     * @return TValue
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -66,7 +75,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Checks if the list has an item by key
      *
-     * @param mixed $offset
+     * @param int $offset
      * @return bool
      */
     public function offsetExists(mixed $offset): bool
@@ -77,7 +86,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Remove item from list by key
      *
-     * @param mixed $offset
+     * @param int $offset
      * @return void
      */
     public function offsetUnset(mixed $offset): void
@@ -88,7 +97,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Merges the elements of one or more custom lists together
      *
-     * @param mixed ...$lists
+     * @param CustomList<TValue> ...$lists
      * @return void
      * @throws CustomListTypeErrorException
      */
@@ -114,11 +123,11 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Get item by key or all items without it
      *
-     * @param string|null $key
-     * @return mixed
+     * @param int|null $key
+     * @return ($key is int ? TValue : self)
      * @throws CustomListKeyNotExistException
      */
-    public function get(?string $key = null): mixed
+    public function get(?int $key = null): mixed
     {
         if ($key !== null) {
             if (!array_key_exists($key, $this->items)) {
@@ -134,7 +143,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Append item to list
      *
-     * @param mixed $item
+     * @param TValue $item
      * @return void
      * @throws CustomListTypeErrorException
      */
@@ -161,7 +170,7 @@ abstract class CustomList implements IteratorAggregate, ArrayAccess, Countable
     /**
      * Checks if the item passed is the right type
      *
-     * @param mixed $item
+     * @param TValue $item
      * @return void
      * @throws CustomListTypeErrorException
      */
